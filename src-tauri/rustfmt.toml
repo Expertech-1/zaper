@@ -1,0 +1,9 @@
+# Rust formatting for Zaper.
+#
+# `max_width` matches Prettier's `printWidth` (100) so Rust and TypeScript wrap
+# at the same column. `use_small_heuristics = "Max"` keeps short struct literals
+# and calls on one line instead of exploding them across four, which keeps the
+# repository's many small domain constructors readable.
+max_width = 100
+use_small_heuristics = "Max"
+edition = "2021"

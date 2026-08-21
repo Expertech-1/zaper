@@ -1,0 +1,29 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# build output
+dist/
+dist-ssr/
+*.local
+.vite/
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/schemas/
+src-tauri/gen/android/
+src-tauri/gen/apple/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# editor / OS
+.DS_Store
+.idea/
+*.swp
+
+# test coverage
+coverage/

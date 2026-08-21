@@ -1,0 +1,78 @@
+[package]
+name = "zaper"
+version = "0.1.0"
+description = "Zaper — Personal AI Interview, Meeting & Research Copilot for Ubuntu"
+authors = ["Zaper contributors"]
+edition = "2021"
+rust-version = "1.77.2"
+
+# The library is compiled into the final binary; the frontend never touches
+# these types directly, so we expose the standard Tauri crate types.
+[lib]
+name = "zaper_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+# Every dependency below is deliberate. See DEVELOPMENT.md §Dependencies for the
+# rationale behind each one; do not add crates without recording why.
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+
+# Persistence. `runtime-tokio` matches Tauri's async runtime. TLS is disabled
+# because SQLite is a local file — there is no network transport to secure.
+# We use the *runtime* query API (`sqlx::query`), not the compile-time macros,
+# so building never requires a live DATABASE_URL or a checked-in offline cache.
+sqlx = { version = "0.8.6", default-features = false, features = [
+  "runtime-tokio",
+  "tls-none",
+  "sqlite",
+  "migrate",
+  # `macros` is needed only for `sqlx::migrate!`, which embeds the migration
+  # files at compile time. The query macros are deliberately unused (above).
+  "macros",
+  "chrono",
+] }
+
+# Async runtime. Tauri already pulls tokio in; we depend on it explicitly for
+# our own tasks, bounded channels (audio pipeline, M3) and timers.
+tokio = { version = "1.53.1", features = [
+  "rt-multi-thread",
+  "macros",
+  "sync",
+  "time",
+  "fs",
+] }
+
+# OS credential storage for AI API keys (never SQLite, never plaintext).
+# `sync-secret-service` + `crypto-rust` speaks the Secret Service D-Bus API in
+# pure Rust, so packaging does not need the libsecret C library.
+keyring = { version = "3.6.3", default-features = false, features = [
+  "sync-secret-service",
+  "crypto-rust",
+] }
+
+uuid = { version = "1.20.0", features = ["v4", "serde"] }
+chrono = { version = "0.4.45", default-features = false, features = [
+  "clock",
+  "serde",
+  "std",
+] }
+
+# Structured diagnostics. Never logs user content by default (see PRIVACY.md).
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt"] }
+
+[dev-dependencies]
+tempfile = "3.27.0"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true
