@@ -76,8 +76,8 @@ export function AssistantSection({ settings }: { settings: Settings }) {
           className="w-full accent-brand-600"
         />
         <p id="response-delay-hint" className="text-[11px] text-zinc-500 dark:text-zinc-400">
-          How long to keep listening after a question looks complete. Longer waits catch
-          trailing words; shorter waits answer sooner.
+          How long to keep listening after a question looks complete. Longer waits catch trailing
+          words; shorter waits answer sooner.
         </p>
       </div>
 

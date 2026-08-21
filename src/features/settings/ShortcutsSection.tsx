@@ -4,11 +4,19 @@ import type { Settings, Shortcuts } from "../../types/ipc";
 import { SettingsSection } from "./SettingsSection";
 
 const SHORTCUT_FIELDS: { key: keyof Shortcuts; label: string; detail: string }[] = [
-  { key: "toggleAssistant", label: "Show / hide assistant", detail: "Brings the floating window up." },
+  {
+    key: "toggleAssistant",
+    label: "Show / hide assistant",
+    detail: "Brings the floating window up.",
+  },
   { key: "readScreen", label: "Read screen", detail: "Captures a region and analyses it." },
   { key: "toggleMeeting", label: "Toggle meeting mode", detail: "Starts or ends a recording." },
   { key: "toggleListening", label: "Toggle listening", detail: "Starts or stops transcription." },
-  { key: "regenerateAnswer", label: "Regenerate answer", detail: "Asks again for the last question." },
+  {
+    key: "regenerateAnswer",
+    label: "Regenerate answer",
+    detail: "Asks again for the last question.",
+  },
 ];
 
 /**

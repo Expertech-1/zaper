@@ -175,29 +175,29 @@ export function toProfileInput(form: ProfileFormState): ProfileInput {
 function isMeaningfulExperience(experience: ExperienceDraft): boolean {
   return Boolean(
     experience.company.trim() ||
-      experience.role.trim() ||
-      experience.description.trim() ||
-      experience.startDate.trim() ||
-      experience.endDate.trim(),
+    experience.role.trim() ||
+    experience.description.trim() ||
+    experience.startDate.trim() ||
+    experience.endDate.trim(),
   );
 }
 
 function isMeaningfulProject(project: ProjectDraft): boolean {
   return Boolean(
     project.name.trim() ||
-      project.description.trim() ||
-      project.technologies.trim() ||
-      project.url.trim(),
+    project.description.trim() ||
+    project.technologies.trim() ||
+    project.url.trim(),
   );
 }
 
 function isMeaningfulStory(story: StoryDraft): boolean {
   return Boolean(
     story.title.trim() ||
-      story.situation.trim() ||
-      story.task.trim() ||
-      story.action.trim() ||
-      story.result.trim() ||
-      story.tags.trim(),
+    story.situation.trim() ||
+    story.task.trim() ||
+    story.action.trim() ||
+    story.result.trim() ||
+    story.tags.trim(),
   );
 }

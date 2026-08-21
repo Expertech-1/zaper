@@ -4,3 +4,6 @@ coverage
 src-tauri/target
 src-tauri/gen
 pnpm-lock.yaml
+
+# Tool-managed local state, not project source.
+.kilo

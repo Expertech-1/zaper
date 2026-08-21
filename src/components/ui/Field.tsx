@@ -1,4 +1,9 @@
-import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type {
+  InputHTMLAttributes,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from "react";
 import { useId } from "react";
 
 const CONTROL_CLASSES = [
@@ -13,7 +18,11 @@ interface FieldProps {
   label: string;
   /** Short explanation rendered under the control. */
   hint?: ReactNode;
-  children: (controlProps: { id: string; className: string; "aria-describedby"?: string }) => ReactNode;
+  children: (controlProps: {
+    id: string;
+    className: string;
+    "aria-describedby"?: string;
+  }) => ReactNode;
 }
 
 /**
@@ -49,7 +58,10 @@ export function TextField({ label, hint, ...props }: TextFieldProps) {
   );
 }
 
-type TextAreaFieldProps = { label: string; hint?: ReactNode } & TextareaHTMLAttributes<HTMLTextAreaElement>;
+type TextAreaFieldProps = {
+  label: string;
+  hint?: ReactNode;
+} & TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 export function TextAreaField({ label, hint, rows = 3, ...props }: TextAreaFieldProps) {
   return (

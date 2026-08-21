@@ -87,9 +87,7 @@ export function ProfileEditor({ profileId, onSaved, onCancel }: ProfileEditorPro
     const input = toProfileInput(form);
 
     try {
-      const saved = profileId
-        ? await updateProfile(profileId, input)
-        : await createProfile(input);
+      const saved = profileId ? await updateProfile(profileId, input) : await createProfile(input);
 
       onSaved(saved);
     } catch (cause) {
@@ -110,6 +108,12 @@ export function ProfileEditor({ profileId, onSaved, onCancel }: ProfileEditorPro
   return (
     <form
       className="flex min-h-0 flex-1 flex-col gap-5"
+      // `required` stays on the fields for assistive technology, but native
+      // constraint validation is disabled: Rust is the single validation
+      // authority, and its human-readable messages are rendered in one
+      // consistent place instead of a browser tooltip for some fields and an
+      // error banner for others.
+      noValidate
       onSubmit={(event) => {
         event.preventDefault();
         void handleSubmit();
@@ -504,7 +508,12 @@ function ChildCard({
     <div className="flex flex-col gap-3 rounded-lg border border-zinc-200 bg-zinc-50/60 p-3 dark:border-zinc-800 dark:bg-zinc-950/40">
       <div className="flex items-center justify-between gap-2">
         <p className="truncate text-xs font-medium text-zinc-600 dark:text-zinc-300">{title}</p>
-        <Button variant="ghost" onClick={onRemove} disabled={disabled} aria-label={`Remove ${title}`}>
+        <Button
+          variant="ghost"
+          onClick={onRemove}
+          disabled={disabled}
+          aria-label={`Remove ${title}`}
+        >
           Remove
         </Button>
       </div>

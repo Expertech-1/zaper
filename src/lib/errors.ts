@@ -27,13 +27,16 @@ export class IpcError extends Error {
  * a string or an `Error`. Both are mapped so callers only ever handle one type.
  */
 export function toIpcError(cause: unknown): IpcError {
+  // Checked first: an `IpcError` also satisfies the wire schema (it carries
+  // kind/message/retryable), so parsing before this would needlessly clone it
+  // and lose reference equality.
+  if (cause instanceof IpcError) {
+    return cause;
+  }
+
   const parsed = ipcErrorSchema.safeParse(cause);
   if (parsed.success) {
     return new IpcError(parsed.data);
-  }
-
-  if (cause instanceof IpcError) {
-    return cause;
   }
 
   const message = cause instanceof Error ? cause.message : String(cause);

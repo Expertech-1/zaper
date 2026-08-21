@@ -38,8 +38,8 @@ export function ProfilesView() {
               {selection.id ? "Edit profile" : "New profile"}
             </h1>
             <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-              Only real experience. The assistant is instructed to say it lacks information
-              rather than invent any.
+              Only real experience. The assistant is instructed to say it lacks information rather
+              than invent any.
             </p>
           </div>
           <Button variant="ghost" onClick={() => setSelection(null)}>
@@ -72,7 +72,9 @@ export function ProfilesView() {
 
       <ErrorNotice error={error} onRetry={() => void load()} onDismiss={clearError} />
 
-      {status === "loading" && summaries.length === 0 ? <LoadingRow label="Loading profiles…" /> : null}
+      {status === "loading" && summaries.length === 0 ? (
+        <LoadingRow label="Loading profiles…" />
+      ) : null}
 
       {status === "ready" && summaries.length === 0 ? (
         <EmptyState
@@ -89,7 +91,11 @@ export function ProfilesView() {
       {summaries.length > 0 ? (
         <ul className="flex flex-col gap-2">
           {summaries.map((summary) => (
-            <ProfileRow key={summary.id} summary={summary} onEdit={() => setSelection({ id: summary.id })} />
+            <ProfileRow
+              key={summary.id}
+              summary={summary}
+              onEdit={() => setSelection({ id: summary.id })}
+            />
           ))}
         </ul>
       ) : null}
@@ -122,8 +128,9 @@ function ProfileRow({ summary, onEdit }: { summary: ProfileSummary; onEdit: () =
         ) : null}
 
         <p className="mt-1 text-[11px] text-zinc-500 dark:text-zinc-500">
-          {countLabel(summary.skillCount, "skill")} · {countLabel(summary.experienceCount, "role")} ·{" "}
-          {countLabel(summary.projectCount, "project")} · {countLabel(summary.storyCount, "story", "stories")}
+          {countLabel(summary.skillCount, "skill")} · {countLabel(summary.experienceCount, "role")}{" "}
+          · {countLabel(summary.projectCount, "project")} ·{" "}
+          {countLabel(summary.storyCount, "story", "stories")}
         </p>
       </div>
 
@@ -148,7 +155,11 @@ function ProfileRow({ summary, onEdit }: { summary: ProfileSummary; onEdit: () =
         ) : (
           <>
             {!summary.isActive ? (
-              <Button variant="secondary" disabled={mutating} onClick={() => void activate(summary.id)}>
+              <Button
+                variant="secondary"
+                disabled={mutating}
+                onClick={() => void activate(summary.id)}
+              >
                 Set active
               </Button>
             ) : null}

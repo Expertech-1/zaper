@@ -279,7 +279,11 @@ function CredentialRow({
         />
       </div>
 
-      <Button variant="secondary" disabled={busy || secret.trim().length === 0} onClick={() => void save()}>
+      <Button
+        variant="secondary"
+        disabled={busy || secret.trim().length === 0}
+        onClick={() => void save()}
+      >
         {configured ? "Replace" : "Save"}
       </Button>
 

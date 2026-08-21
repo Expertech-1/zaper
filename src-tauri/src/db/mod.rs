@@ -211,4 +211,63 @@ mod tests {
         let path = database_path(Path::new("/home/user/.local/share/dev.zaper.app"));
         assert_eq!(path, Path::new("/home/user/.local/share/dev.zaper.app/zaper.db"));
     }
+
+    // The tests above use an in-memory database. These exercise the real
+    // production path — an on-disk file, WAL mode, directory creation — because
+    // that is where first-launch bugs actually live.
+
+    #[tokio::test]
+    async fn connecting_creates_the_data_directory_and_the_database_file() {
+        let temp = tempfile::tempdir().expect("temp dir");
+        // Deliberately nested: on first launch the app data directory does not
+        // exist yet.
+        let path = temp.path().join("nested").join("dev.zaper.app").join(DB_FILE_NAME);
+
+        let db = connect(&path).await.expect("connect");
+        db.close().await;
+
+        assert!(path.exists(), "the database file should have been created");
+    }
+
+    #[tokio::test]
+    async fn reconnecting_reapplies_nothing_and_keeps_the_data() {
+        let temp = tempfile::tempdir().expect("temp dir");
+        let path = database_path(temp.path());
+
+        let db = connect(&path).await.expect("first connect");
+        sqlx::query(
+            "INSERT INTO profiles (id, name, created_at, updated_at)
+             VALUES ('p1', 'Ada', '2026-01-01T00:00:00Z', '2026-01-01T00:00:00Z')",
+        )
+        .execute(&db)
+        .await
+        .expect("insert");
+        db.close().await;
+
+        // Migrations must be idempotent: a second launch reruns `connect`.
+        let db = connect(&path).await.expect("second connect");
+        let stored: (String,) = sqlx::query_as("SELECT name FROM profiles WHERE id = 'p1'")
+            .fetch_one(&db)
+            .await
+            .expect("read back");
+        db.close().await;
+
+        assert_eq!(stored.0, "Ada");
+    }
+
+    #[tokio::test]
+    async fn on_disk_databases_use_wal_and_enforce_foreign_keys() {
+        let temp = tempfile::tempdir().expect("temp dir");
+        let db = connect(&database_path(temp.path())).await.expect("connect");
+
+        let (journal_mode,): (String,) =
+            sqlx::query_as("PRAGMA journal_mode").fetch_one(&db).await.expect("pragma");
+        let (foreign_keys,): (i64,) =
+            sqlx::query_as("PRAGMA foreign_keys").fetch_one(&db).await.expect("pragma");
+
+        db.close().await;
+
+        assert_eq!(journal_mode.to_lowercase(), "wal");
+        assert_eq!(foreign_keys, 1, "foreign keys must be on for every connection");
+    }
 }

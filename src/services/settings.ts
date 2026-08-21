@@ -47,8 +47,6 @@ export async function listCredentialStatus(): Promise<CredentialStatus[]> {
 }
 
 /** Removes a stored credential. Idempotent. */
-export async function deleteProviderCredential(
-  provider: ProviderKind,
-): Promise<CredentialStatus> {
+export async function deleteProviderCredential(provider: ProviderKind): Promise<CredentialStatus> {
   return callCommand("delete_provider_credential", { provider });
 }

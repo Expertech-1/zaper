@@ -24,9 +24,7 @@ export function PrivacySection({ settings }: { settings: Settings }) {
       detail="Zaper is local-first: no analytics, no telemetry, no background uploads, no cloud sync."
     >
       <div className="rounded-lg border border-zinc-200 bg-zinc-50/60 p-3 text-xs leading-relaxed dark:border-zinc-800 dark:bg-zinc-950/40">
-        <h3 className="font-semibold text-zinc-700 dark:text-zinc-200">
-          What is sent to cloud AI
-        </h3>
+        <h3 className="font-semibold text-zinc-700 dark:text-zinc-200">What is sent to cloud AI</h3>
 
         {cloudCapabilities.length === 0 ? (
           <p className="mt-1 text-zinc-600 dark:text-zinc-400">
